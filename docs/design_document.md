@@ -16,11 +16,12 @@ The goal of this project is to develop a web-based version of the Hangman game t
 ## Design
 
 ### Colors
-- **Background**: #F0F0F0
+- **Background 1**: #00ffff
+- **Background 2**: #ffffff
 - **Text**: #333333
 - **Buttons**: #4CAF50 (Correct), #FF5722 (Incorrect)
 - **Hangman Parts**: #000000
-- **Letter Tiles**: #2196F3
+- **Keyboard Tiles**: #2196F3
 
 ### Layout
 The game interface will consist of the following elements:
