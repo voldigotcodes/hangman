@@ -79,10 +79,13 @@ function start(){
 
     //initializing all the keys of the keyboard
     for (let i = 65; i < 91; i++) {
-        let keys = document.createElement("button")
-        keys.classList.add("key")
-        keys.innerHTML += '<span class="key">'+'</span>'
+        let key = document.createElement("button");
+        key.classList.add("key");
+        key.innerText = String.fromCharCode(i);
+
+        keyboardContainer.append(key)
     }
+    
 
     displayOptions();
 }
