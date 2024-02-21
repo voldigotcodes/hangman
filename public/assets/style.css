@@ -40,3 +40,43 @@ body{
     text-transform: capitalize;
     cursor: pointer;
 }
+
+#options-container button:disabled{
+    border: 3px solid #808080;
+    color: #808080;
+    background-color: #efefef;
+}
+
+#options-container button:active{
+    background-color: cyan;
+    border: 3px solid black;
+    color: white;
+}
+.keyboard-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6em;
+}
+
+#letter-container button{
+    height: 2.4em;
+    width: 2.4em;
+    border-radius: 0.3em;
+    background-color: white;
+    cursor: pointer;
+}
+.new-game-popup{
+    background-color: white;
+    position: absolute;
+    left:0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 0.6em;
+}
