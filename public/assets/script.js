@@ -19,6 +19,9 @@ let options = {
     countries :["Congo", "Canada", "Royaume Unis", "France", "Chine"],
 };
 
+answerCount = 0;
+goodAnswerCount = 0;
+
 let choosenWord = " ";
 
 function displayOptions(){
@@ -82,6 +85,27 @@ function start(){
         let key = document.createElement("button");
         key.classList.add("key");
         key.innerText = String.fromCharCode(i);
+
+        key.addEventListener("click", ()=>{
+            key.disabled = true;
+            let charWord = choosenWord.split("");
+            var indexes = [];
+
+            for(i in charWord){
+                if(charWord[i] == key.innerText){
+                    indexes.push(i);
+                }
+            }
+
+            for(i of indexes){
+                Array.from(inputDisplaySection.children)[i].innerHTML ="";
+                Array.from(inputDisplaySection.children)[i].innerHTML += key.innerText
+                Array.from(inputDisplaySection.children)[i].classList.add("displayed")
+                Array.from(inputDisplaySection.children)[i].classList.remove("dash")
+            }
+            console.log(choosenWord)
+            console.log(indexes);
+        })
 
         keyboardContainer.append(key)
     }
