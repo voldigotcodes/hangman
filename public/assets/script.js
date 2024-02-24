@@ -72,7 +72,7 @@ function randomWord(type){
    choosenWord = optionsArray[Math.floor(Math.random()* optionsArray.length)];
    choosenWord =  choosenWord.toUpperCase()
 
-   let wordDisplay = choosenWord.replace(/./g, '<span class="dash">[_]</span>')
+   let wordDisplay = choosenWord.replace(/./g, '<span class="dash">_|</span>')
    inputDisplaySection.innerHTML += wordDisplay
 }
 
@@ -91,30 +91,125 @@ function start(){
             let charWord = choosenWord.split("");
             var indexes = [];
 
+            //Verifying if the key pressed is included in the word
+            if(choosenWord.includes(key.innerText)){
             for(i in charWord){
                 if(charWord[i] == key.innerText){
                     indexes.push(i);
+                    goodAnswerCount++;
                 }
             }
+        }else{
+            answerCount++;
+            //Draw a part of the stickman when the wrong key is pressed
+            draw(answerCount);
+            
+        }
 
+            //Changing the display to show the letters
+            let dashes = Array.from(inputDisplaySection.children)
             for(i of indexes){
-                Array.from(inputDisplaySection.children)[i].innerHTML ="";
-                Array.from(inputDisplaySection.children)[i].innerHTML += key.innerText
-                Array.from(inputDisplaySection.children)[i].classList.add("displayed")
-                Array.from(inputDisplaySection.children)[i].classList.remove("dash")
+                dashes[i].innerHTML ="";
+                dashes[i].innerHTML += key.innerText
+                dashes[i].classList.add("displayed")
+                dashes[i].classList.remove("dash")
             }
+
+            //Verifying if we completed the word
+            if(goodAnswerCount == dashes.length){
+                //Win scenario
+                disableButtons();
+                resultText.classList.add("win-msg");
+                resultText.innerHTML+='<h2>YOU WON !</h2>'
+                resultText.innerHTML += "<p>Want to try a different category ?</p>";
+            }else if(answerCount == 6){
+                //answerCount == 6 for the head, body, left hand, right hand, left foot and right foot
+                //Loose scenario
+                disableButtons();
+                resultText.classList.add("lose-msg");
+                resultText.innerHTML+='<h2>YOU LOST !</h2>'
+                resultText.innerHTML += "<p>Poor man died because you couldn't recognize : "+choosenWord + " </p>";
+                return;
+            }
+
+
+            console.log(answerCount)
             console.log(choosenWord)
-            console.log(indexes);
         })
 
-        keyboardContainer.append(key)
+        keyboardContainer.append(key);
+
     }
     
 
     displayOptions();
 }
 
+function restart() {
+    newGameButton.addEventListener("click", () =>{
+            optionsContainer.innerHTML = "";
+            keyboardContainer.innerHTML = "";
+            inputDisplaySection.innerHTML = "";
+
+            newGameContainer.classList.add("hide");
+            resultText.innerHTML = "";
+
+            resultText.classList.remove("lose-msg");
+            resultText.classList.remove("win-msg");
+
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            answerCount = 0;
+            goodAnswerCount = 0;
+            choosenWord = "";
+
+            start();
+            
+    })
+}
+
+function draw(bodyPart){
+    let pen = canvas.getContext("2d");
+
+    switch (bodyPart) {
+        case 1:
+            pen.beginPath();
+            pen.arc(45, 25, 20, 0, 2 * Math.PI);
+            pen.stroke();
+            break;
+        case 2:
+            pen.moveTo(45, 45);
+            pen.lineTo(45, 90);
+            pen.stroke();
+            break;
+        case 3:
+            pen.moveTo(45, 45);
+            pen.lineTo(23, 68);
+            pen.stroke();
+            break;
+        case 4:
+            pen.moveTo(45, 45);
+            pen.lineTo(68, 68);
+            pen.stroke();
+            break;
+            case 5:
+                pen.moveTo(45, 90);
+                pen.lineTo(23, 113);
+                pen.stroke();
+                break;
+            case 6:
+                pen.moveTo(45, 90);
+                pen.lineTo(68, 113);
+                pen.stroke();
+                break;
+        default:
+            break;
+    }
+}
+
 start();
+restart();
 
 
 
