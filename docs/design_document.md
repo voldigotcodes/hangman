@@ -10,30 +10,29 @@ The goal of this project is to develop a web-based version of the Hangman game t
 - **Word Selection**: Random selection of words from a predefined list.
 - **Interactive Interface**: User-friendly interface for guessing letters and displaying progress.
 - **Visual Feedback**: Display of the hangman's progress based on incorrect guesses.
-- **Scoring System**: Keep track of scores based on the number of incorrect guesses.
-- **Leaderboard**: Display the top scorers.
+
 
 ## Design
 
 ### Colors
 - **Background 1**: #00ffff
 - **Background 2**: #ffffff
-- **Text**: #333333
-- **Buttons**: #4CAF50 (Correct), #FF5722 (Incorrect)
+- **Text**: #333333 (others), #05bc05 (win message), #ff0000 (lose message)
+- **Buttons**: #808080 (Disabled), #ffffff (active), #00ffff (background active), #efefef (background disabled)
 - **Hangman Parts**: #000000
-- **Keyboard Tiles**: #2196F3
+- **Keyboard Tiles**: #808080 (Disabled), #ffffff (active)
 
 ### Layout
 The game interface will consist of the following elements:
-1. **Header**: Displaying the game title and possibly a logo.
-2. **Word Display Area**: Showing the secret word with blanks for each letter.
-3. **Hangman Visual**: Displaying the hangman's progress based on incorrect guesses.
-4. **Letter Selection Area**: A grid of buttons representing the alphabet for the user to choose from.
-5. **Scoreboard**: Displaying the current score and possibly a leaderboard.
+1. **Header**: Displaying the game title.
+2. **Word Category Display Area**: Asking you what type of word you want to guess.
+3. **Word Display Area**: Showing the secret word with blanks for each letter.
+4. **Hangman Visual**: Displaying the hangman's progress based on incorrect guesses.
+5. **Letter Selection Area**: A grid of buttons representing the alphabet for the user to choose from.
 
 ### Flow
-1. The game starts by selecting a random word from the predefined list.
-2. The secret word is displayed with blanks representing each letter.
+1. The game starts by selecting a predefined niche from which we will generate a random word.
+2. The secret word is displayed with blanks (dashes) representing each letter.
 3. The user selects a letter from the alphabet grid.
    - If the letter is correct, it fills in the corresponding blanks in the word display.
    - If the letter is incorrect, a part of the hangman is drawn.
