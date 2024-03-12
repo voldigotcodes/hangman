@@ -6,6 +6,18 @@ const newGameButton = document.getElementById("new-game-button");
 const canvas = document.getElementById("canvas");
 const resultText = document.getElementById("result-text");
 
+let hangmanApi = {
+    randomWord : function() {
+        $.ajax({
+            type: "GET",
+            url: "hangman.php/exec=init?",
+            success: function (type) {
+                randomWord(type)
+            }
+        })
+    }
+};
+
 let options = {
     fruits : [
         "Pomme",
