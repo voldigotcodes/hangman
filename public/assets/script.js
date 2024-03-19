@@ -6,30 +6,108 @@ const newGameButton = document.getElementById("new-game-button");
 const canvas = document.getElementById("canvas");
 const resultText = document.getElementById("result-text");
 
+// $(document).ready(function(){
+//     $.ajax({
+//         type: "POST",
+//         url: "/app/models/hangmanEngine.php",
+//         data: {
+//             "exec" : "init",
+//             "value" : "",
+//             "key" : ""
+//         },
+//         success : function(word){
+//             console.log("initialized")
+//         }
+//     })
+// })
+
 let hangmanApi = {
-    randomWord : function() {
+    WordList : function() {
         $.ajax({
-            type: "GET",
-            url: "hangman.php/exec=init?",
-            success: function (type) {
-                randomWord(type)
+            type: "POST",
+            url: "hangmanEngine.php/exec=init?",
+            success: function (list) {f
+                randomWord(list)
             }
         })
+    },
+    generateWord : function(_type){
+        $.post("/app/models/hangmanEngine.php", {"value" : _type},
+            function (data, status) {
+                alert("hey " + data + " status : " + status)
+                result = data;
+                randomWord(_type, data)
+            },
+        );
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/app/models/hangmanEngine.php",
+    //         contentType: "application/json; charset=utf-8",
+    //         success : function(){
+    //             randomWord(_type)
+                
+    //         }
+    //     })
+    },
+    getWord : function(){
+        wordShow = ""
+        // var xmlhttp = new XMLHttpRequest();
+  
+        // xmlhttp.onreadystatechange = function() {
+        //     if (this.readyState == 4 && this.status == 200) {
+        //         myObj = JSON.parse(this.responseText);
+        //         wordShow = myObj;
+        //         console.log("the word is: " + myObj)
+        //     }
+        // };
+        // xmlhttp.open("GET", "/app/models/HangmanEngine.php?path=word", true);
+        // xmlhttp.send();
+
+        $.ajax({
+            type: "GET",
+            url: "/app/models/hangmanEngine.php",
+            data: {
+                "path" : "word"
+            },
+            success : function(item){
+                wordShow = item
+                console.log("voici le mot " + JSON.parse(item))
+            }
+        })
+        return wordShow
+    },
+    containsKey : function(key){
+        $.ajax({
+            type: "GET",
+            url: "/app/models/hangmanEngine.php",
+            data: {
+                "path" : "keyURL",
+                "key" : key
+            },
+            success : function(word){
+                console.log(word)
+            }
+        })
+    },
+    testOut : function(item){
+        var xmlhttp = new XMLHttpRequest();
+  
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                myObj = JSON.parse(this.responseText);
+                console.log(myObj.options[item]);
+            }
+        };
+        xmlhttp.open("GET", "/app/models/HangmanEngine.php", true);
+        xmlhttp.send();
     }
 };
 
-let options = {
-    fruits : [
-        "Pomme",
-        "Bleuets",
-        "Mandarine",
-        "Anana",
-        "Pomergranade",
-        "Watermelon"
-    ],
-    animals:["Herisson", "Rinoceros", "Ecureuil", "Panther", "Zebre"],
-    countries :["Congo", "Canada", "Royaume Unis", "France", "Chine"],
-};
+let options = [
+    "fruits",
+    "animals",
+    "countries"
+];
 
 answerCount = 0;
 goodAnswerCount = 0;
@@ -40,8 +118,8 @@ function displayOptions(){
     optionsContainer.innerHTML += "<H3> Please Select An Option</H3>";
 
     let optionButton = document.createElement("div");
-    for (let value in options) {
-        optionButton.innerHTML += '<button class="options" onclick=randomWord("'+value+'")>'+ value + '</button>';
+    for (let value of options) {
+       optionButton.innerHTML += '<button class="options" onclick=hangmanApi.generateWord("'+value+'")>'+ value + '</button>';
     }
     optionsContainer.appendChild(optionButton);
 }
@@ -65,7 +143,7 @@ function disableButtons(){
 }
 
 //generate the word used for the game
-function randomWord(type){
+function randomWord(type, word){
    let optionsButton = document.querySelectorAll(".options")
 
    //we highlight the selected button and block the rest
@@ -80,11 +158,9 @@ function randomWord(type){
    keyboardContainer.classList.remove("hide");
    inputDisplaySection.innerHTML = "";
 
-   let optionsArray = options[type]
-   choosenWord = optionsArray[Math.floor(Math.random()* optionsArray.length)];
-   choosenWord =  choosenWord.toUpperCase()
-
-   let wordDisplay = choosenWord.replace(/./g, '<span class="dash">_|</span>')
+   //API parameter
+   let wordDisplay = word.toUpperCase().replace(/./g, '<span class="dash">_|</span>')
+   console.log(wordDisplay)
    inputDisplaySection.innerHTML += wordDisplay
 }
 
@@ -104,7 +180,8 @@ function start(){
             var indexes = [];
 
             //Verifying if the key pressed is included in the word
-            if(choosenWord.includes(key.innerText)){
+            if(hangmanApi.containsKey(key.innerText)){
+                console.log("We got the key")
             for(i in charWord){
                 if(charWord[i] == key.innerText){
                     indexes.push(i);
