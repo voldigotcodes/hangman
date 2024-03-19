@@ -47,8 +47,7 @@ class HangmanEngine{
             }elseif($this->badAnswerCount>=6){
                 //LOOSE
                 $GAME_STATE = 'LOOSE';
-                // $request = json_encode();
-            }
+                        }
     }
 
     function getWord(){
